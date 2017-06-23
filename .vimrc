@@ -83,18 +83,6 @@ set infercase                   " (inf) during keyword completion, fix case of n
 set gdefault                    " replace globally and add /g to toggle behavior
 
 
-" match html tags (emmet I think)
-"let g:mta_filetypes = {
-    "\ 'html' : 1,
-    "\ 'xhtml' : 1,
-    "\ 'xml' : 1,
-    "\ 'jinja' : 1,
-    "\ 'php' : 1,
-    "\ }
-
-
-
-
 " Key Mappings
 " --------------------------------------------
 
