@@ -121,7 +121,7 @@ nnoremap <leader><space> :noh<cr>
 "nnoremap ; :
 
 " fix background paint issue, quickly
-nnoremap bdbd :set background=dark<CR>
+nnoremap <leader>bd :set background=dark<CR>
 
 " Auto commands
 
