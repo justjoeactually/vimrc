@@ -21,6 +21,8 @@ Plugin 'mattn/emmet-vim'
 
 Plugin 'tpope/vim-surround'
 
+Plugin 'scrooloose/nerdtree'
+
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
 filetype plugin indent on    " required
@@ -47,6 +49,7 @@ set lazyredraw                  " don't redraw screen unless you have to, to spe
 set scrolloff=3                 " leave some context on the screen
 set relativenumber              " check abs in the status if you need it
 set undofile                    " persistent undo history
+set undodir=$HOME/.vim/undo     " where to save undo histories
 
 set number                      " (nu) display line numbers
 set nowrap                      " do not wrap lines (wrapping messes with my visualization of indentation)
