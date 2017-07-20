@@ -59,10 +59,10 @@ set nowrap                      " do not wrap lines (wrapping messes with my vis
 set linebreak                   " (lbr) wrap long lines at a space instead of in the middle of a word
 set listchars+=tab:>-           " (lcs) strings used in 'list' mode to show hidden characters (default=eol:$)
 set listchars+=trail:-
+set backspace=indent,eol,start
 
 "colorscheme monokai-chris
 colorscheme monokai
-set background=dark
 
 " working with buffers
 set foldcolumn=8                " (fdc) width of fold column (to see where folds are)
