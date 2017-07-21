@@ -136,6 +136,11 @@ au FocusLost * :wa
 " remember last position
 au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") | exe "normal! g`\"" | endif
 
+" set indentation for js, css, html
+au Filetype javascript setlocal ts=2 sw=2 smartindent
+au Filetype html setlocal ts=2 sw=2 smartindent
+au Filetype css setlocal ts=2 sw=2 smartindent
+
 " strip all trailing whitespace
 nnoremap <leader>W :%s/\s\+$//<cr>:let @/=''<CR>
 
