@@ -1,4 +1,9 @@
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" to setup your local env run these 4 commands (not tested yet :p)
+" $ echo 'runtime vimrc' ~/.vimrc
+" $ git clone https://github.com/justjoeactually/vimrc.git ~/.vim
+" $ git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+" $ mkdir ~/.vim/swapfiles
 set nocompatible              " be iMproved, required
 filetype off                  " required
 
