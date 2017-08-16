@@ -17,10 +17,13 @@ Plugin 'VundleVim/Vundle.vim'
 Plugin 'flazz/vim-colorschemes'
 Plugin 'crusoexia/vim-monokai'
 
-Plugin 'jelera/vim-javascript-syntax'
-
-Plugin 'pangloss/vim-javascript'
+" Javascript linting etc. and I could never get it to work :'(
+" ============================================================
+"Plugin 'jelera/vim-javascript-syntax'
+"Plugin 'pangloss/vim-javascript'
 Plugin 'nathanaelkane/vim-indent-guides'
+"Plugin 'vim-syntastic/syntastic'
+" end js
 
 Plugin 'mattn/emmet-vim'
 
@@ -28,7 +31,16 @@ Plugin 'tpope/vim-surround'
 
 Plugin 'scrooloose/nerdtree'
 
-Plugin 'posva/vim-vue'
+" Plugin 'posva/vim-vue'
+
+" standarized settings
+Plugin 'editorconfig/editorconfig-vim'
+
+" fuzzy file search
+Plugin 'kien/ctrlp.vim'
+
+" comment command is 'gc'
+Plugin 'tomtom/tcomment_vim'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -45,6 +57,18 @@ filetype plugin indent on    " required
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 syntax on
+
+" set syntastic options
+"set statusline+=%#warningmsg#
+"set statusline+=%{SyntasticStatuslineFlag()}
+"set statusline+=%*
+"
+"let g:syntastic_always_populate_loc_list = 1
+"let g:syntastic_auto_loc_list = 1
+"let g:syntastic_check_on_open = 1
+"let g:syntastic_check_on_wq = 0
+"let g:syntastic_javascript_checkers = ['eslint']
+"let g:syntastic_javascript_eslint_exe = 'npm run lint --'
 
 " Vim, before you think about using a buffer
 set directory=$HOME/.vim/swapfiles//
@@ -68,6 +92,7 @@ set backspace=indent,eol,start
 
 "colorscheme monokai-chris
 colorscheme monokai
+"colorscheme vividchalk
 
 " working with buffers
 set foldcolumn=8                " (fdc) width of fold column (to see where folds are)
@@ -99,6 +124,14 @@ set gdefault                    " replace globally and add /g to toggle behavior
 " namespaced key for user commands
 let mapleader = ","
 
+" CtrlP default mappings
+let g:ctrlp_map = '<c-p>'
+let g:ctrlp_cmd = 'CtrlP'
+
+" setup ag and the silver searcher for find and replace in dir -r (also run
+" >brew install the_silver_surfer
+"let g:ackprg = 'ag --nogroup --nocolor --column'
+
 " escape insert mode
 inoremap jk <Esc>
 
@@ -111,6 +144,10 @@ nmap <silent> <A-Down> :wincmd j<CR>
 nmap <silent> <A-Up> :wincmd k<CR>
 nmap <silent> <A-Left> :wincmd h<CR>
 nmap <silent> <A-Right> :wincmd l<CR>
+
+" make and load sessions with <F2> and <F3>
+map <F2> :mksession! ~/vim_session <cr>
+map <F3> :source ~/vim_session <cr>
 
 " <F7> toggles hidden characters
 map  <F7> :set list!<CR>
@@ -133,7 +170,21 @@ nnoremap <leader><space> :noh<cr>
 " fix background paint issue, quickly
 nnoremap <leader>bd :set background=dark<CR>
 
+" toggle nerdTree
+nnoremap <Leader>f :NERDTreeToggle<Enter>
+
+" open nerdTree for current file
+nnoremap <silent> <Leader>v :NERDTreeFind<CR>
+
 " Auto commands
+" =============
+
+" open nerdtree when opening vim
+au StdinReadPre * let s:std_in=1
+au VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+
+" close nerdtree if last window open
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
 
 " save on focus change, why not?
 au FocusLost * :wa
