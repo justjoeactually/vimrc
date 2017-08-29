@@ -31,6 +31,7 @@ Plugin 'tpope/vim-surround'
 
 Plugin 'scrooloose/nerdtree'
 
+" Vue syntax
 " Plugin 'posva/vim-vue'
 
 " standarized settings
@@ -41,6 +42,9 @@ Plugin 'kien/ctrlp.vim'
 
 " comment command is 'gc'
 Plugin 'tomtom/tcomment_vim'
+
+" Laravel blade syntax
+Plugin 'jwalton512/vim-blade'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -95,7 +99,7 @@ colorscheme monokai
 "colorscheme vividchalk
 
 " working with buffers
-set foldcolumn=8                " (fdc) width of fold column (to see where folds are)
+set foldcolumn=4                " (fdc) width of fold column (to see where folds are)
 set foldmethod=indent           " (fdm) creates a fold for every level of indentation
 set foldlevel=99                " (fdl) when file is opened, don't close any folds
 set foldenable                  " (fen) enables or disables folding
@@ -126,11 +130,12 @@ let mapleader = ","
 
 " CtrlP default mappings
 let g:ctrlp_map = '<c-p>'
-let g:ctrlp_cmd = 'CtrlP'
+let g:ctrlp_cmd = 'CtrlPLastMode'
+let g:ctrlp_extensions = ['buffertag', 'tag', 'line', 'dir']
 
 " setup ag and the silver searcher for find and replace in dir -r (also run
 " >brew install the_silver_surfer
-"let g:ackprg = 'ag --nogroup --nocolor --column'
+" let g:ackprg = 'ag --nogroup --nocolor --column'
 
 " escape insert mode
 inoremap jk <Esc>
