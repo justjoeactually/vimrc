@@ -76,7 +76,9 @@ syntax on
 
 " Vim, before you think about using a buffer
 set directory=$HOME/.vim/swapfiles//
-set statusline=%f
+"set statusline=%f
+" tpope's
+set statusline=[%n]\ %<%.99f\ %h%w%m%r%{exists('*CapsLockStatusline')?CapsLockStatusline():''}%y%=%-16(\ %l,%c-%v\ %)%P
 set showcmd                     " (sc) show last command, turn off if terminal slow, ha!
 set hidden                      " (hid) allows switching buffers without saving changes first
 set wildmenu                    " (wmnu) visual menu for cmd autocomplete
@@ -133,6 +135,13 @@ let g:ctrlp_map = '<c-p>'
 let g:ctrlp_cmd = 'CtrlPLastMode'
 let g:ctrlp_extensions = ['buffertag', 'tag', 'line', 'dir']
 
+" CtrlP ignore these files
+set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*/public/*,*/node_modules/*,*/vendor/*,*/.git/*,*/storage/*
+
+" CtrlP open in nearest git dir, but on lif the curr working dir outside of
+" CtrlP is not a direct ancestor of the dir of the current file
+let g:ctrlp_working_path_mode = 'ra'
+
 " setup ag and the silver searcher for find and replace in dir -r (also run
 " >brew install the_silver_surfer
 " let g:ackprg = 'ag --nogroup --nocolor --column'
@@ -143,12 +152,12 @@ inoremap jk <Esc>
 inoremap eev :vsplit $MYVIMRC<cr>
 
 " allows moving between horizonatlly split windows much faster and more intuitive (meh, I'll try it), maximizes the window height
-map <C-J> <C-W>j<C-W>_
-map <C-K> <C-W>k<C-W>_
-nmap <silent> <A-Down> :wincmd j<CR>
-nmap <silent> <A-Up> :wincmd k<CR>
-nmap <silent> <A-Left> :wincmd h<CR>
-nmap <silent> <A-Right> :wincmd l<CR>
+nnoremap <C-H> <C-W>W
+nnoremap <C-L> <C-W>w
+
+" move among buffers with CTRL
+map <C-J> :bprev<CR>
+map <C-K> :bnext<CR>
 
 " make and load sessions with <F2> and <F3>
 map <F2> :mksession! ~/vim_session <cr>
@@ -206,7 +215,7 @@ au Filetype css setlocal ts=2 sw=2 smartindent
 nnoremap <leader>W :%s/\s\+$//<cr>:let @/=''<CR>
 
 " quick fold tag, good for HTML
-nnoremap <leader>ft Vatzf
+nnoremap <leader>tf Vatzf
 
 " underline a comment heading with equals
 nnoremap <leader>1 yypVr=
