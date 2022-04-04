@@ -1,14 +1,9 @@
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " to setup your local env run these 4 commands (not tested yet :p)
 " $ echo 'runtime vimrc' ~/.vimrc
-" confirm that worked:
-" $ cat ~/.vimrc
 " $ git clone https://github.com/justjoeactually/vimrc.git ~/.vim
 " $ git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
 " $ mkdir ~/.vim/swapfiles
-" Launch vim and run :PluginInstall
-" or to install from command line: vim +PluginInstall +qall
-
 set nocompatible              " be iMproved, required
 filetype off                  " required
 
@@ -21,11 +16,15 @@ Plugin 'VundleVim/Vundle.vim'
 
 Plugin 'flazz/vim-colorschemes'
 Plugin 'crusoexia/vim-monokai'
+Plugin 'rakr/vim-one'
 
-Plugin 'jelera/vim-javascript-syntax'
-
+" Javascript linting etc. and I could never get it to work :'(
+" ============================================================
+"Plugin 'jelera/vim-javascript-syntax'
 Plugin 'pangloss/vim-javascript'
 Plugin 'nathanaelkane/vim-indent-guides'
+"Plugin 'vim-syntastic/syntastic'
+" end js
 
 Plugin 'mattn/emmet-vim'
 
@@ -33,7 +32,22 @@ Plugin 'tpope/vim-surround'
 
 Plugin 'scrooloose/nerdtree'
 
-Plugin 'posva/vim-vue'
+" Vue syntax
+" Plugin 'posva/vim-vue'
+
+" standarized settings
+Plugin 'editorconfig/editorconfig-vim'
+
+" fuzzy file search
+Plugin 'kien/ctrlp.vim'
+
+" comment command is 'gc'
+Plugin 'tomtom/tcomment_vim'
+
+" Laravel blade syntax
+Plugin 'jwalton512/vim-blade'
+
+Plugin 'fatih/vim-go'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -51,9 +65,23 @@ filetype plugin indent on    " required
 
 syntax on
 
+" set syntastic options
+"set statusline+=%#warningmsg#
+"set statusline+=%{SyntasticStatuslineFlag()}
+"set statusline+=%*
+"
+"let g:syntastic_always_populate_loc_list = 1
+"let g:syntastic_auto_loc_list = 1
+"let g:syntastic_check_on_open = 1
+"let g:syntastic_check_on_wq = 0
+"let g:syntastic_javascript_checkers = ['eslint']
+"let g:syntastic_javascript_eslint_exe = 'npm run lint --'
+
 " Vim, before you think about using a buffer
 set directory=$HOME/.vim/swapfiles//
-set statusline=%f
+"set statusline=%f
+" tpope's
+set statusline=[%n]\ %<%.99f\ %h%w%m%r%{exists('*CapsLockStatusline')?CapsLockStatusline():''}%y%=%-16(\ %l,%c-%v\ %)%P
 set showcmd                     " (sc) show last command, turn off if terminal slow, ha!
 set hidden                      " (hid) allows switching buffers without saving changes first
 set wildmenu                    " (wmnu) visual menu for cmd autocomplete
@@ -71,11 +99,14 @@ set listchars+=tab:>-           " (lcs) strings used in 'list' mode to show hidd
 set listchars+=trail:-
 set backspace=indent,eol,start
 
-"colorscheme monokai-chris
+"colorscheme sol
+"colorscheme Tomorrow-Night
 colorscheme monokai
+"colorscheme one
+"set background=dark
 
 " working with buffers
-set foldcolumn=8                " (fdc) width of fold column (to see where folds are)
+set foldcolumn=4                " (fdc) width of fold column (to see where folds are)
 set foldmethod=indent           " (fdm) creates a fold for every level of indentation
 set foldlevel=99                " (fdl) when file is opened, don't close any folds
 set foldenable                  " (fen) enables or disables folding
@@ -104,18 +135,38 @@ set gdefault                    " replace globally and add /g to toggle behavior
 " namespaced key for user commands
 let mapleader = ","
 
+" CtrlP default mappings
+let g:ctrlp_map = '<c-p>'
+let g:ctrlp_cmd = 'CtrlPLastMode'
+let g:ctrlp_extensions = ['buffertag', 'tag', 'line', 'dir']
+
+" CtrlP ignore these files
+set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*/public/*,*/node_modules/*,*/.git/*,*/storage/*
+
+" CtrlP open in nearest git dir, but on lif the curr working dir outside of
+" CtrlP is not a direct ancestor of the dir of the current file
+let g:ctrlp_working_path_mode = 'ra'
+
+" setup ag and the silver searcher for find and replace in dir -r (also run
+" >brew install the_silver_surfer
+" let g:ackprg = 'ag --nogroup --nocolor --column'
+
 " escape insert mode
 inoremap jk <Esc>
 
 inoremap eev :vsplit $MYVIMRC<cr>
 
 " allows moving between horizonatlly split windows much faster and more intuitive (meh, I'll try it), maximizes the window height
-map <C-J> <C-W>j<C-W>_
-map <C-K> <C-W>k<C-W>_
-nmap <silent> <A-Down> :wincmd j<CR>
-nmap <silent> <A-Up> :wincmd k<CR>
-nmap <silent> <A-Left> :wincmd h<CR>
-nmap <silent> <A-Right> :wincmd l<CR>
+nnoremap <C-H> <C-W>W
+nnoremap <C-L> <C-W>w
+
+" move among buffers with CTRL
+map <C-J> :bprev<CR>
+map <C-K> :bnext<CR>
+
+" make and load sessions with <F2> and <F3>
+map <F2> :mksession! ~/vim_session <cr>
+map <F3> :source ~/vim_session <cr>
 
 " <F7> toggles hidden characters
 map  <F7> :set list!<CR>
@@ -138,7 +189,21 @@ nnoremap <leader><space> :noh<cr>
 " fix background paint issue, quickly
 nnoremap <leader>bd :set background=dark<CR>
 
+" toggle nerdTree
+nnoremap <Leader>f :NERDTreeToggle<Enter>
+
+" open nerdTree for current file
+nnoremap <silent> <Leader>v :NERDTreeFind<CR>
+
 " Auto commands
+" =============
+
+" open nerdtree when opening vim
+au StdinReadPre * let s:std_in=1
+au VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+
+" close nerdtree if last window open
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
 
 " save on focus change, why not?
 au FocusLost * :wa
@@ -155,7 +220,7 @@ au Filetype css setlocal ts=2 sw=2 smartindent
 nnoremap <leader>W :%s/\s\+$//<cr>:let @/=''<CR>
 
 " quick fold tag, good for HTML
-nnoremap <leader>ft Vatzf
+nnoremap <leader>tf Vatzf
 
 " underline a comment heading with equals
 nnoremap <leader>1 yypVr=
